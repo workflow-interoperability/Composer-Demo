@@ -1,19 +1,46 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Write your model definitions here
- */
-
 namespace org.sysu.wf
+
+enum Status{
+  o CREATED
+  o PUBLISH
+  o ACCEPTED
+  o REJECTED
+  o ACCOMPLISHED
+  o FAILED
+}
+
+concept Order{
+  o String orderStatement
+  o DateTime deadlineOfAccepting
+  o DateTime deadlineOfAccomplishing
+  o String ProfessionOrParticipant default = 'none'
+}
+  
+asset Process identified by processId {
+  o String processId
+  o Status status default = 'PUBLISH'
+  o Boolean isAccomplishSender default = false
+  o Boolean c default = false
+  o String sender
+  o String receiver default = 'none'
+  o Order order
+}
+
+participant Member identified by memberId {
+  o String memberId
+  o String profession
+}
+
+abstract transaction ChangeStatus{
+  --> Process process
+}
+
+transaction Publish{
+  o Order order
+}
+
+transaction Accepted extends ChangeStatus{
+}
+
+transaction Accomplished extends ChangeStatus{
+}

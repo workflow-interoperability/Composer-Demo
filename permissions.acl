@@ -12,6 +12,14 @@
  * limitations under the License.
  */
 
+rule SystemACL {
+    description:  "System ACL to permit all access"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
 rule NetworkAdminUser {
     description: "Grant business network administrators full access to user resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
@@ -26,4 +34,81 @@ rule NetworkAdminSystem {
     operation: ALL
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
+}
+
+rule MemberSelf{
+  	description: "Members can operate all operation to self"
+  	participant(m): "org.sysu.wf.Member"
+  	operation: ALL
+    resource(x): "org.sysu.wf.Member"
+  	condition: (x.memberId == m.memberId)
+  	action: ALLOW
+}
+
+rule MemberToRead{
+  	description: "Members can see all process"
+  	participant(m): "org.sysu.wf.Member"
+  	operation: READ
+    resource(x): "org.sysu.wf.Process"
+  	condition: (x.sender == m.getIdentifier()||x.receiver == m.getIdentifier()||(x.status == 'PUBLISH'&&(x.order.ProfessionOrParticipant == m.profession||x.order.ProfessionOrParticipant == 'none'||x.order.ProfessionOrParticipant == m.getIdentifier())))
+  	action: ALLOW
+}
+
+rule ProcessRemoveProcess{
+  	description: "Member can remove the process"
+  	participant: "org.sysu.wf.Member"
+  	operation: DELETE
+    resource: "org.sysu.wf.Process"
+  	action: ALLOW
+}
+
+rule ProcessPublished{
+  	description: "A process is publish by transaction"
+  	participant: "org.sysu.wf.Member"
+  	operation: CREATE
+    resource: "org.sysu.wf.Process"
+  	transaction: "org.sysu.wf.Publish"
+  	action: ALLOW
+}
+
+rule ProcessAccepted{
+  	description: "A order's status is altered by transaction(from publish to accepted)"
+  	participant: "org.sysu.wf.Member"
+  	operation: UPDATE
+    resource: "org.sysu.wf.Process"
+  	transaction: "org.sysu.wf.Accepted"
+  	action: ALLOW
+}
+
+rule ProcessAccomplished{
+  	description: "A order's status is altered by transaction(from accepted to accomplished)"
+  	participant: "org.sysu.wf.Member"
+  	operation: UPDATE
+    resource: "org.sysu.wf.Process"
+  	transaction: "org.sysu.wf.Accomplished"
+  	action: ALLOW
+}
+
+rule MemberToPublish{
+  	description: "Members can publish his/her order"
+  	participant: "org.sysu.wf.Member"
+  	operation: UPDATE,CREATE
+    resource: "org.sysu.wf.Publish"
+  	action: ALLOW
+}
+
+rule MemberToAccept{
+  	description: "Members can accept others' order"
+  	participant: "org.sysu.wf.Member"
+  	operation: CREATE,UPDATE
+    resource: "org.sysu.wf.Accepted"
+  	action: ALLOW
+}
+
+rule MemberToAccomplish{
+  	description: "Members show the process accomplished"
+  	participant: "org.sysu.wf.Member"
+  	operation: CREATE
+    resource: "org.sysu.wf.Accomplished"
+  	action: ALLOW
 }
