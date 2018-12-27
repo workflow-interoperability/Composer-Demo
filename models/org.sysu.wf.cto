@@ -15,7 +15,7 @@ concept Order{
   o DateTime deadlineOfAccomplishing
   o String ProfessionOrParticipant default = 'none'
 }
-  
+
 asset Process identified by processId {
   o String processId
   o Status status default = 'PUBLISH'

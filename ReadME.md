@@ -1,4 +1,4 @@
-# 本区块链网络功能说明
+## 本区块链网络功能说明
 
 >一个通用的、用于多方间订单发布与接收的区块链网络模型，运行于基于浏览器的Hyperledger Composer开发环境——Composer Playground。关于相关概念的详细解释与Composer Playground环境的运行与使用可参阅此链接[Hyperledger Composer 基础](https://www.ibm.com/developerworks/cn/cloud/library/cl-model-test-your-blockchain-network-with-hyperledger-composer-playground/index.html?ca=drs-)
 
@@ -28,13 +28,8 @@ ID用来确认每一个Member
   - 回到 **Test** 标签中，点击左下角 `Submit Transaction` 即可用 *Publish* 选项发布订单。该订单的 *sender* 会自动设置为当前身份的Member ID。若要接受某个订单，可使用 *Accepted* 选项，注意其中 *process* 的ID编号要与目标订单的ID对应
   - 创建多个成员，可进行多成员间的订单发布、接受、签名完成等交互，注意使用每个订单的ID来辨别不同的订单
 
-# 导出至本地运行
+## 本地network安装及删除
 
-具体方法见[Hyperledger Composer 基础，第 3 部分在本地部署您的区块链网络，与之交互并扩展它](https://www.ibm.com/developerworks/cn/cloud/library/cl-deploy-interact-extend-local-blockchain-network-with-hyperledger-composer/index.html)
-##### 注意
+启动脚本已经写入`package.json`中，在安装network之前，需要先安装fabric，具体参考官方文档；完成安装后，需要依次执行`npm run prepublish` `npm run deploy` `npm run start`，完成后，network便被成功安装到了本地；
 
-上述链接内教程 **1C** 部分的命令语句已过时，新语句可见[此博客](http://blog.sina.com.cn/s/blog_54a0240a0102z4xz.html)，例如教程 **1C** 部分的deploy语句变更为install语句。关于Composer cli命令语句的文档见[Hyperledger Composer Command Line
-](https://hyperledger.github.io/composer/v0.19/reference/commands)以及[Hyperledger Composer Network Start
-](https://hyperledger.github.io/composer/v0.19/reference/composer.network.start.html)
-
-
+由于官方并没有给删除的命令，所以删除时需要手动删除所有的fabric容器，之后如果需要安装，可以参考上一段内容

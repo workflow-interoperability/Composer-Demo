@@ -9,7 +9,9 @@
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna",
     "pretest": "npm run lint",
     "lint": "eslint .",
-    "test": "nyc mocha -t 0 test/*.js && cucumber-js"
+    "test": "nyc mocha -t 0 test/*.js && cucumber-js",
+    "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@hlfv1",
+    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.1 --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret admin"
   },
   "keywords": [
     "composer",
