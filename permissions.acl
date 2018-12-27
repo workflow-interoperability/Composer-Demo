@@ -48,7 +48,7 @@ rule MemberSelf{
 rule MemberToRead{
   	description: "Members can see all process"
   	participant(m): "org.sysu.wf.Member"
-  	operation: READ
+  	operation: READ, CREATE
     resource(x): "org.sysu.wf.Process"
   	condition: (x.sender == m.getIdentifier()||x.receiver == m.getIdentifier()||(x.status == 'PUBLISH'&&(x.order.ProfessionOrParticipant == m.profession||x.order.ProfessionOrParticipant == 'none'||x.order.ProfessionOrParticipant == m.getIdentifier())))
   	action: ALLOW
