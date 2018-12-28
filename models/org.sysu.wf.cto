@@ -1,16 +1,16 @@
 namespace org.sysu.wf
 
-concept ProcessRelatedData {
+concept MemberMessage {
   o String From
-  o String To
-  o String[] Members
+  o String[] To
 }
 
 asset Process identified by processId {
   o String processId
-  o String status default = 'PUBLISH'
-  o ProcessRelatedData processRelatedData
+  o String Condition default = 'PUBLISH'
+  o String processRelatedData // json format
   o String[] ApplicationRelatedData
+  o MemberMessage memberMessage
 }
 
 participant Member identified by memberId {
@@ -18,13 +18,14 @@ participant Member identified by memberId {
   o String Introduction
 }
 
-transaction Publish {
-  o ProcessRelatedData processRelatedData
+transaction Create {
+  o MemberMessage memberMessage
   o String[] ApplicationRelatedData
+  o String processRelatedData
 }
 
 transaction ChangeStatus {
   o String ProcessID
   o String Condition
-  o String To
+  o String[] To
 }

@@ -58,7 +58,7 @@ rule GetProcessList {
   participant(p): "org.sysu.wf.Member"
   operation: READ
   resource(r): "org.sysu.wf.Process"
-  condition: (r.processRelatedData.Members.indexOf(p.memberId != -1))
+  condition: (r.memberMessage.From === p.memberId || r.memberMessage.To.indexOf(p.memberId) != -1)
   action: ALLOW
 }
 
@@ -85,8 +85,8 @@ rule PublishTransaction {
   description: "All members can create a transaction."
   participant(p): "org.sysu.wf.Member"
   operation: ALL
-  resource(res): "org.sysu.wf.Publish"
-  transaction(tx): "org.sysu.wf.Publish"
+  resource(res): "org.sysu.wf.Create"
+  transaction(tx): "org.sysu.wf.Create"
   condition: (true)
   action: ALLOW
 }

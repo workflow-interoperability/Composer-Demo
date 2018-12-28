@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js",
     "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@hlfv1",
+    "upgrade": "composer network upgrade --card PeerAdmin@hlfv1 --networkName block_chain-interface_4 --networkVersion 0.0.1",
     "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.1 --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret admin"
   },
   "keywords": [
