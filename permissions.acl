@@ -36,79 +36,57 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-rule MemberSelf{
-  	description: "Members can operate all operation to self"
-  	participant(m): "org.sysu.wf.Member"
-  	operation: ALL
-    resource(x): "org.sysu.wf.Member"
-  	condition: (x.memberId == m.memberId)
-  	action: ALLOW
+rule CreateProcess {
+  description: "All of members can publish a process"
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.Process"
+  action: ALLOW
 }
 
-rule MemberToRead{
-  	description: "Members can see all process"
-  	participant(m): "org.sysu.wf.Member"
-  	operation: READ, CREATE
-    resource(x): "org.sysu.wf.Process"
-  	condition: (x.sender == m.getIdentifier()||x.receiver == m.getIdentifier()||(x.status == 'PUBLISH'&&(x.order.ProfessionOrParticipant == m.profession||x.order.ProfessionOrParticipant == 'none'||x.order.ProfessionOrParticipant == m.getIdentifier())))
-  	action: ALLOW
+rule ChangeProcessStatus {
+  description: "Only members who satisfies given conditions can change process status"
+  participant(p): "org.sysu.wf.Member"
+  operation: UPDATE
+  resource(r): "org.sysu.wf.Process"
+  condition: (p.memberId == r.processRelatedData.To)
+  action: ALLOW
 }
 
-rule ProcessRemoveProcess{
-  	description: "Member can remove the process"
-  	participant: "org.sysu.wf.Member"
-  	operation: DELETE
-    resource: "org.sysu.wf.Process"
-  	action: ALLOW
+rule GetProcessList {
+  description: "Only members who participated in the process can get the information of the process"
+  participant(p): "org.sysu.wf.Member"
+  operation: READ
+  resource(r): "org.sysu.wf.Process"
+  condition: (r.processRelatedData.Members.indexOf(p.memberId != -1))
+  action: ALLOW
 }
 
-rule ProcessPublished{
-  	description: "A process is publish by transaction"
-  	participant: "org.sysu.wf.Member"
-  	operation: CREATE
-    resource: "org.sysu.wf.Process"
-  	transaction: "org.sysu.wf.Publish"
-  	action: ALLOW
+rule GetMemberList {
+  description: "Description of the Conditional ACL rule"
+  participant(p): "org.sysu.wf.Member"
+  operation: ALL
+  resource(r): "org.sysu.wf.Member"
+  condition: (p.memberId == r.memberId)
+  action: ALLOW
 }
 
-rule ProcessAccepted{
-  	description: "A order's status is altered by transaction(from publish to accepted)"
-  	participant: "org.sysu.wf.Member"
-  	operation: UPDATE
-    resource: "org.sysu.wf.Process"
-  	transaction: "org.sysu.wf.Accepted"
-  	action: ALLOW
+rule ChangeStatusTransaction {
+  description: "All members can change status a transaction."
+  participant(p): "org.sysu.wf.Member"
+  operation: ALL
+  resource(res): "org.sysu.wf.ChangeStatus"
+  transaction(tx): "org.sysu.wf.ChangeStatus"
+  condition: (true)
+  action: ALLOW
 }
 
-rule ProcessAccomplished{
-  	description: "A order's status is altered by transaction(from accepted to accomplished)"
-  	participant: "org.sysu.wf.Member"
-  	operation: UPDATE
-    resource: "org.sysu.wf.Process"
-  	transaction: "org.sysu.wf.Accomplished"
-  	action: ALLOW
-}
-
-rule MemberToPublish{
-  	description: "Members can publish his/her order"
-  	participant: "org.sysu.wf.Member"
-  	operation: UPDATE,CREATE
-    resource: "org.sysu.wf.Publish"
-  	action: ALLOW
-}
-
-rule MemberToAccept{
-  	description: "Members can accept others' order"
-  	participant: "org.sysu.wf.Member"
-  	operation: CREATE,UPDATE
-    resource: "org.sysu.wf.Accepted"
-  	action: ALLOW
-}
-
-rule MemberToAccomplish{
-  	description: "Members show the process accomplished"
-  	participant: "org.sysu.wf.Member"
-  	operation: CREATE
-    resource: "org.sysu.wf.Accomplished"
-  	action: ALLOW
+rule PublishTransaction {
+  description: "All members can create a transaction."
+  participant(p): "org.sysu.wf.Member"
+  operation: ALL
+  resource(res): "org.sysu.wf.Publish"
+  transaction(tx): "org.sysu.wf.Publish"
+  condition: (true)
+  action: ALLOW
 }

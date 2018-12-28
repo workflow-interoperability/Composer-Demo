@@ -1,46 +1,30 @@
 namespace org.sysu.wf
 
-enum Status{
-  o CREATED
-  o PUBLISH
-  o ACCEPTED
-  o REJECTED
-  o ACCOMPLISHED
-  o FAILED
-}
-
-concept Order{
-  o String orderStatement
-  o DateTime deadlineOfAccepting
-  o DateTime deadlineOfAccomplishing
-  o String ProfessionOrParticipant default = 'none'
+concept ProcessRelatedData {
+  o String From
+  o String To
+  o String[] Members
 }
 
 asset Process identified by processId {
   o String processId
-  o Status status default = 'PUBLISH'
-  o Boolean isAccomplishSender default = false
-  o Boolean c default = false
-  o String sender
-  o String receiver default = 'none'
-  o Order order
+  o String status default = 'PUBLISH'
+  o ProcessRelatedData processRelatedData
+  o String[] ApplicationRelatedData
 }
 
 participant Member identified by memberId {
   o String memberId
-  o String profession
+  o String Introduction
 }
 
-abstract transaction ChangeStatus{
-  --> Process process
+transaction Publish {
+  o ProcessRelatedData processRelatedData
+  o String[] ApplicationRelatedData
 }
 
-transaction Publish{
-  o Order order
-}
-
-transaction Accepted extends ChangeStatus{
-}
-
-transaction Accomplished extends ChangeStatus{
+transaction ChangeStatus {
+  o String ProcessID
+  o String Condition
+  o String To
 }
