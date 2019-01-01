@@ -10,9 +10,11 @@
     "pretest": "npm run lint",
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js",
-    "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@hlfv1",
-    "upgrade": "composer network upgrade --card PeerAdmin@hlfv1 --networkName block_chain-interface_4 --networkVersion 0.0.1",
-    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.1 --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret admin"
+    "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@block_chain-interface_4",
+    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.1 --card PeerAdmin@block_chain-interface_4  --file networkadmin.card --networkAdmin admin --networkAdminEnrollSecret adminpw",
+    "import": "composer card import --file networkadmin.card",
+    "ping": "composer network ping --card admin@block_chain-interface_4",
+    "rest": "composer-rest-server"
   },
   "keywords": [
     "composer",

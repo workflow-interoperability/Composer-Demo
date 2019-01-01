@@ -49,14 +49,14 @@ rule ChangeProcessStatus {
   participant(p): "org.sysu.wf.Member"
   operation: UPDATE
   resource(r): "org.sysu.wf.Process"
-  condition: (p.memberId == r.processRelatedData.To)
+  condition: (r.processRelatedData.To.indexOf(p.memberId) != -1 || r.memberMessage.From === p.memberId)
   action: ALLOW
 }
 
 rule GetProcessList {
   description: "Only members who participated in the process can get the information of the process"
   participant(p): "org.sysu.wf.Member"
-  operation: READ
+  operation: READ, UPDATE
   resource(r): "org.sysu.wf.Process"
   condition: (r.memberMessage.From === p.memberId || r.memberMessage.To.indexOf(p.memberId) != -1)
   action: ALLOW
