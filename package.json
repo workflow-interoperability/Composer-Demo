@@ -3,18 +3,19 @@
     "composer": "^0.20.5"
   },
   "name": "block_chain-interface_4",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Workflow interface4 implemented with block chain",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna -v",
     "pretest": "npm run lint",
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js",
     "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@block_chain-interface_4",
-    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.1 --card PeerAdmin@block_chain-interface_4  --file networkadmin.card --networkAdmin admin --networkAdminEnrollSecret adminpw",
+    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.2 --card PeerAdmin@block_chain-interface_4  --file networkadmin.card --networkAdmin admin --networkAdminEnrollSecret adminpw",
     "import": "composer card import --file networkadmin.card",
     "ping": "composer network ping --card admin@block_chain-interface_4",
-    "rest": "composer-rest-server"
+    "rest": "composer-rest-server -c admin@block_chain-interface_4 -n never -p 3000",
+    "upgrade": "composer network upgrade -c PeerAdmin@hlfv1 -n block_chain-interface_4 -V 0.0.2"
   },
   "keywords": [
     "composer",
