@@ -29,3 +29,6 @@ transaction ChangeStatus {
   o String Condition
   o String[] To
 }
+
+event StatusChangedEvent {
+}
