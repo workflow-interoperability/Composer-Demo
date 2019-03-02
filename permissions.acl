@@ -36,57 +36,37 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-rule CreateProcess {
-  description: "All of members can publish a process"
+rule PublishProcessInstance {
+  description: "All of members can publish a process instance"
   participant: "org.sysu.wf.Member"
   operation: CREATE
-  resource: "org.sysu.wf.Process"
+  resource: "org.sysu.wf.ProcessInstance"
   action: ALLOW
 }
 
-rule ChangeProcessStatus {
-  description: "Only members who satisfies given conditions can change process status"
+rule UpdateProcessInstance {
+  description: "Only owner can update process instance"
   participant(p): "org.sysu.wf.Member"
   operation: UPDATE
-  resource(r): "org.sysu.wf.Process"
-  condition: (r.processRelatedData.To.indexOf(p.memberId) != -1 || r.memberMessage.From === p.memberId)
+  resource(r): "org.sysu.wf.ProcessInstance"
+  condition: (p.memberID == r.owner)
   action: ALLOW
 }
 
-rule GetProcessList {
-  description: "Only members who participated in the process can get the information of the process"
+rule GetProcessInstance {
+  description: "Only members except owner who satisfies id or role condition given in process instance can get the information of the process"
   participant(p): "org.sysu.wf.Member"
-  operation: READ, UPDATE
-  resource(r): "org.sysu.wf.Process"
-  condition: (r.memberMessage.From === p.memberId || r.memberMessage.To.indexOf(p.memberId) != -1)
+  operation: READ
+  resource(r): "org.sysu.wf.ProcessInstance"
+  condition: (p.memberID == r.owner || p.memberID == r.subscriberInformation.id || p.roleList.filter(function(v){ return r.subscriberInformation.roles.indexOf(v) > -1 }).length > 0)
   action: ALLOW
 }
 
-rule GetMemberList {
-  description: "Description of the Conditional ACL rule"
+rule GetMemberInformation {
+  description: "A member can only get details of its own"
   participant(p): "org.sysu.wf.Member"
   operation: ALL
   resource(r): "org.sysu.wf.Member"
-  condition: (p.memberId == r.memberId)
-  action: ALLOW
-}
-
-rule ChangeStatusTransaction {
-  description: "All members can change status a transaction."
-  participant(p): "org.sysu.wf.Member"
-  operation: ALL
-  resource(res): "org.sysu.wf.ChangeStatus"
-  transaction(tx): "org.sysu.wf.ChangeStatus"
-  condition: (true)
-  action: ALLOW
-}
-
-rule PublishTransaction {
-  description: "All members can create a transaction."
-  participant(p): "org.sysu.wf.Member"
-  operation: ALL
-  resource(res): "org.sysu.wf.Create"
-  transaction(tx): "org.sysu.wf.Create"
-  condition: (true)
+  condition: (p.memberID == r.memberID)
   action: ALLOW
 }

@@ -1,34 +1,53 @@
 namespace org.sysu.wf
 
-concept MemberMessage {
-  o String From
-  o String[] To
+participant Member identified by memberID {
+  o String memberID
+  o String information
+  o String[] roleList
 }
 
-asset Process identified by processId {
-  o String processId
-  o String Condition default = 'PUBLISH'
-  o String processRelatedData // json format
-  o String[] ApplicationRelatedData
-  o MemberMessage memberMessage
+concept SubscriberInformation {
+  o String[] roles
+  o String id
 }
 
-participant Member identified by memberId {
-  o String memberId
-  o String Introduction
+asset ProcessInstance identified by processID {
+  o String processID
+  o String owner
+  o SubscriberInformation subscriberInformation
+  o String condition default = 'PUBLISH'
+  o String processRelatedData // format: json
+  o String[] applicationRelatedData
 }
 
-transaction Create {
-  o MemberMessage memberMessage
-  o String[] ApplicationRelatedData
+transaction Publish {
+  o String processID
+  o String[] applicationRelatedData
   o String processRelatedData
+  o SubscriberInformation subscriberInformation
 }
 
-transaction ChangeStatus {
-  o String ProcessID
-  o String Condition
-  o String[] To
+transaction ChangeCondition {
+  o String processID
+  o String condition
 }
 
-event StatusChangedEvent {
+transaction ChangeProcessData {
+  o Boolean isProcessRelatedDataChanged
+  o String processRelatedData
+  o Boolean isApplicationRelatedDataChanged
+  o String[] applicationRelatedData
+}
+
+transaction ChangeSubscriberInformation {
+  o String processID
+  o SubscriberInformation subscriberInformation
+}
+
+event ConditionChangedEvent {
+  o String processID
+}
+
+event ProcessDataChangedEvent {
+  o String processID
 }

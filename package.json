@@ -3,19 +3,18 @@
     "composer": "^0.20.5"
   },
   "name": "block_chain-interface_4",
-  "version": "0.0.2",
+  "version": "2.0.0",
   "description": "Workflow interface4 implemented with block chain",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna -v",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna",
     "pretest": "npm run lint",
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js",
-    "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@block_chain-interface_4",
-    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 0.0.2 --card PeerAdmin@block_chain-interface_4  --file networkadmin.card --networkAdmin admin --networkAdminEnrollSecret adminpw",
-    "import": "composer card import --file networkadmin.card",
+    "deploy": "composer network install --archiveFile ./dist/block_chain-interface_4.bna --card PeerAdmin@hlfv1",
+    "start": "composer network start --networkName block_chain-interface_4 --networkVersion 1.0.0 --card PeerAdmin@hlfv1  --file networkadmin.card --networkAdmin admin --networkAdminEnrollSecret adminpw",
     "ping": "composer network ping --card admin@block_chain-interface_4",
     "rest": "composer-rest-server -c admin@block_chain-interface_4 -n never -p 3000",
-    "upgrade": "composer network upgrade -c PeerAdmin@hlfv1 -n block_chain-interface_4 -V 0.0.2"
+    "upgrade": "composer network upgrade -c PeerAdmin@hlfv1 -n block_chain-interface_4 -V 1.0.0"
   },
   "keywords": [
     "composer",
@@ -25,18 +24,17 @@
   "email": "xuanzhaotang@gmail.com",
   "license": "Apache-2.0",
   "devDependencies": {
+    "chai": "latest",
+    "chai-as-promised": "latest",
     "composer-admin": "^0.20.5",
     "composer-cli": "^0.20.5",
-    "composer-client": "^0.20.5",
     "composer-common": "^0.20.5",
     "composer-connector-embedded": "^0.20.5",
     "composer-cucumber-steps": "^0.20.5",
-    "chai": "latest",
-    "chai-as-promised": "latest",
     "cucumber": "^2.2.0",
     "eslint": "latest",
-    "nyc": "latest",
     "mkdirp": "latest",
-    "mocha": "latest"
+    "mocha": "latest",
+    "nyc": "latest"
   }
 }
