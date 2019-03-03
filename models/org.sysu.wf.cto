@@ -33,6 +33,7 @@ transaction ChangeCondition {
 }
 
 transaction ChangeProcessData {
+  o String processID
   o Boolean isProcessRelatedDataChanged
   o String processRelatedData
   o Boolean isApplicationRelatedDataChanged

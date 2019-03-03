@@ -36,7 +36,7 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-rule PublishProcessInstance {
+rule CreateProcessInstance {
   description: "All of members can publish a process instance"
   participant: "org.sysu.wf.Member"
   operation: CREATE
@@ -53,7 +53,7 @@ rule UpdateProcessInstance {
   action: ALLOW
 }
 
-rule GetProcessInstance {
+rule ReadProcessInstance {
   description: "Only members except owner who satisfies id or role condition given in process instance can get the information of the process"
   participant(p): "org.sysu.wf.Member"
   operation: READ
@@ -68,5 +68,37 @@ rule GetMemberInformation {
   operation: ALL
   resource(r): "org.sysu.wf.Member"
   condition: (p.memberID == r.memberID)
+  action: ALLOW
+}
+
+rule PublishProcessTX {
+  description: "..."
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.Publish"
+  action: ALLOW
+}
+
+rule ChangeProcessDataTX {
+  description: "..."
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.ChangeProcessData"
+  action: ALLOW
+}
+
+rule ChangeSubscriberInformationTX {
+  description: "..."
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.ChangeSubscriberInformation"
+  action: ALLOW
+}
+
+rule ChangeConditionTX {
+  description: "..."
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.ChangeCondition"
   action: ALLOW
 }
