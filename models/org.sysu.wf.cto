@@ -3,7 +3,6 @@ namespace org.sysu.wf
 participant Member identified by memberID {
   o String memberID
   o String information
-  o String[] roleList
 }
 
 concept SubscriberInformation {
@@ -11,44 +10,55 @@ concept SubscriberInformation {
   o String id
 }
 
-asset ProcessInstance identified by processID {
-  o String processID
+concept FromToData {
+  o String ProcessID
+  o String ProcessInstanceID
+  o String IESMID
+}
+
+concept WorkflowRelevantData {
+  o FromToData from
+  o FromToData to
+}
+
+concept ApplicationData {
+  o String url
+}
+
+concept Payload {
+  o ApplicationData applicationData
+  o WorkflowRelevantData workflowRelevantData
+  o String workflowControlData
+}
+
+asset IM identified by id {
+  o String id
+  o Payload payload
   o String owner
   o SubscriberInformation subscriberInformation
-  o String condition default = 'PUBLISH'
-  o String processRelatedData // format: json
-  o String[] applicationRelatedData
 }
 
-transaction Publish {
-  o String processID
-  o String[] applicationRelatedData
-  o String processRelatedData
+asset PIIS identified by id {
+  o String id
+  o FromToData from
+  o FromToData to
+  o String IMID
+  o String owner
   o SubscriberInformation subscriberInformation
 }
 
-transaction ChangeCondition {
-  o String processID
-  o String condition
+transaction PublishIM {
+  o IM im
 }
 
-transaction ChangeProcessData {
-  o String processID
-  o Boolean isProcessRelatedDataChanged
-  o String processRelatedData
-  o Boolean isApplicationRelatedDataChanged
-  o String[] applicationRelatedData
+transaction PublishPIIS {
+  o PIIS piis
 }
 
-transaction ChangeSubscriberInformation {
-  o String processID
-  o SubscriberInformation subscriberInformation
+event IMCreatedEvent {
+  o String id
 }
 
-event ConditionChangedEvent {
-  o String processID
-}
-
-event ProcessDataChangedEvent {
-  o String processID
+event PIISCreatedEvent {
+  o String id
 }

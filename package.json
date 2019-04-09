@@ -3,7 +3,7 @@
     "composer": "^0.20.5"
   },
   "name": "block_chain-interface_4",
-  "version": "2.1.0",
+  "version": "3.1.0",
   "description": "Workflow interface4 implemented with block chain",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/block_chain-interface_4.bna",

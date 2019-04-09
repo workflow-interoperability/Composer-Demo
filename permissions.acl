@@ -36,29 +36,53 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-rule CreateProcessInstance {
-  description: "All of members can publish a process instance"
+rule CreateIMInstance {
+  description: "All of members can publish a IM instance"
   participant: "org.sysu.wf.Member"
   operation: CREATE
-  resource: "org.sysu.wf.ProcessInstance"
+  resource: "org.sysu.wf.IM"
   action: ALLOW
 }
 
-rule UpdateProcessInstance {
-  description: "Only owner can update process instance"
-  participant(p): "org.sysu.wf.Member"
+rule CreatePIISInstance {
+  description: "All of members can publish a PIIS instance"
+  participant: "org.sysu.wf.Member"
+  operation: CREATE
+  resource: "org.sysu.wf.PIIS"
+  action: ALLOW
+}
+
+rule UpdateIM {
+  description: "no one can update IM instance"
+  participant: "org.sysu.wf.Member"
   operation: UPDATE
-  resource(r): "org.sysu.wf.ProcessInstance"
-  condition: (p.memberID == r.owner)
-  action: ALLOW
+  resource: "org.sysu.wf.IM"
+  action: DENY
 }
 
-rule ReadProcessInstance {
-  description: "Only members except owner who satisfies id or role condition given in process instance can get the information of the process"
+rule UpdatePIIS {
+  description: "no one can update PIIS instance"
+  participant: "org.sysu.wf.Member"
+  operation: UPDATE
+  resource: "org.sysu.wf.PIIS"
+  action: DENY
+}
+
+rule ReadIM {
+  description: ""
   participant(p): "org.sysu.wf.Member"
   operation: READ
-  resource(r): "org.sysu.wf.ProcessInstance"
-  condition: (p.memberID == r.owner || p.memberID == r.subscriberInformation.id || p.roleList.filter(function(v){ return r.subscriberInformation.roles.indexOf(v) > -1 }).length > 0)
+  resource(r): "org.sysu.wf.IM"
+  condition: (p.memberID == r.owner || p.memberID == r.subscriberInformation.id)
+  action: ALLOW
+}
+
+rule ReadPIIS {
+  description: ""
+  participant(p): "org.sysu.wf.Member"
+  operation: READ
+  resource(r): "org.sysu.wf.PIIS"
+  condition: (p.memberID == r.owner || p.memberID == r.subscriberInformation.id)
   action: ALLOW
 }
 
@@ -71,34 +95,18 @@ rule GetMemberInformation {
   action: ALLOW
 }
 
-rule PublishProcessTX {
+rule PublishIMTX {
   description: "..."
   participant: "org.sysu.wf.Member"
   operation: CREATE
-  resource: "org.sysu.wf.Publish"
+  resource: "org.sysu.wf.PublishIM"
   action: ALLOW
 }
 
-rule ChangeProcessDataTX {
+rule PublishPIIXTX {
   description: "..."
   participant: "org.sysu.wf.Member"
   operation: CREATE
-  resource: "org.sysu.wf.ChangeProcessData"
-  action: ALLOW
-}
-
-rule ChangeSubscriberInformationTX {
-  description: "..."
-  participant: "org.sysu.wf.Member"
-  operation: CREATE
-  resource: "org.sysu.wf.ChangeSubscriberInformation"
-  action: ALLOW
-}
-
-rule ChangeConditionTX {
-  description: "..."
-  participant: "org.sysu.wf.Member"
-  operation: CREATE
-  resource: "org.sysu.wf.ChangeCondition"
+  resource: "org.sysu.wf.PublishPIIS"
   action: ALLOW
 }
